@@ -1,8 +1,9 @@
 const { createClient } = require("redis");
 /* create client by url */
-const client = createClient({
-  url: process.env.REDIS_ENDPOINTS,
-});
+const client = createClient();
+// {
+//   url: process.env.REDIS_ENDPOINTS,
+// }
 try {
   /* connect client to server for cache */
   const runCache = async () => {

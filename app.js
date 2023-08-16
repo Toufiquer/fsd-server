@@ -2,10 +2,14 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const __featuresRouter = require("./v1/__features/__features.route");
+const registerRouter = require("./v1/register/register.route");
 const {
   globalErrorHandler,
 } = require("./middleware/globalErrorHandler/globalErrorHandler");
 const { apiLimiter } = require("./middleware/apiLimiter/apiLimiter");
+const {
+  verifyAuthorization,
+} = require("./middleware/verifyAuthorization/verifyAuthorization");
 
 // middle ware
 app.use(express.json());
@@ -20,7 +24,10 @@ app.get("/", (req, res) => {
 
 // __features route
 app.use("/api/v1/__features", __featuresRouter);
-
+app.use("/api/v1/register", registerRouter);
+app.get("/test", verifyAuthorization, (req, res, next) => {
+  res.send({});
+});
 // Global Error Handler
 app.use(globalErrorHandler);
 
