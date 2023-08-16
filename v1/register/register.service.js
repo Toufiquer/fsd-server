@@ -36,6 +36,32 @@ module.exports.registerServiceGetId = async (id) => {
 
   return result;
 };
+module.exports.registerServiceGetEmail = async (email) => {
+  // @ find one
+  const result = await registerModel.findOne({ email });
+  // @ find a doc
+  // const result = await registerModel.find({id: "1234..."});
+  // const result = await registerModel.findById("1234");
+  // @ find all doc $or
+  // const result = await registerModel.find({$or: [{id: "123"},{name: "name"}]});
+  // const result = await registerModel.find({},{name,quantity});
+  // @ find all doc $ne
+  // const result = await registerModel.find({},{-name,-quantity});
+  //  * all can add .find.skip().limit()
+  //  * all can add .find.sort({quantity: -1})
+
+  // @ find all doc chaining
+  //   const result = await registerModel
+  //     .where("name")
+  //     .equals(/\w/)
+  //     .where("quantity")
+  //     .length(2)
+  //     .lt(1000)
+  //     .limit(2)
+  //     .sort({ quantity: -1 });
+
+  return result;
+};
 module.exports.registerServiceGet = async (id) => {
   // @ find a doc
   // const result = await registerModel.find({id: "1234..."});

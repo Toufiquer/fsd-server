@@ -24,6 +24,7 @@ app.get("/", (req, res) => {
 
 // __features route
 app.use("/api/v1/__features", __featuresRouter);
+// also logIn route implement here by "api/v1/register/logIn"
 app.use("/api/v1/register", registerRouter);
 app.get("/test", verifyAuthorization, (req, res, next) => {
   res.send({});

@@ -4,9 +4,13 @@ const {
   registerServiceGetId,
   registerServiceDelete,
   registerServiceUpdate,
+  registerServiceGetEmail,
 } = require("./register.service");
 const { redisGet, redisSet, redisDelete } = require("../../utils/cacheRedis");
-const { encryptPassword } = require("../../utils/passwordCryptr");
+const {
+  encryptPassword,
+  decryptPassword,
+} = require("../../utils/passwordCryptr");
 const { creteJWT, checkJWT } = require("../../utils/jwt");
 /* request method:post || Save register || req.body */
 module.exports.saveRegister = async (req, res, next) => {
@@ -22,10 +26,10 @@ module.exports.saveRegister = async (req, res, next) => {
     //   password: resultEncryptPass,
     // });
     // * handover to Mongoose
-    // const result = await registerServiceSave({
-    //   email: email,
-    //   password: resultEncryptPass,
-    // });
+    const result = await registerServiceSave({
+      email: email,
+      password: resultEncryptPass,
+    });
     res.status(200).send({
       status: "success",
       message: "register successfully saved",
@@ -142,6 +146,36 @@ module.exports.deleteRegister = async (req, res, next) => {
   } catch (err) {
     res.status(400).send({
       message: "register Fails to Delete",
+      message: err.message,
+    });
+  }
+};
+// *** Only for logIn business logic
+/* request method:post || check user || req.body */
+module.exports.checkLogIn = async (req, res, next) => {
+  try {
+    const pass = req.body.password;
+    const email = req.body.email;
+    const resultDecryptPass = decryptPassword(pass);
+    const resultToken = creteJWT(email);
+    // * no need to check cache form redis for registration or login
+    // const keyRedis = req.baseUrl + req._parsedUrl.path;
+    // const resultRedisSet = await redisSet(`${keyRedis}`, {
+    //   email: email,
+    //   password: resultEncryptPass,
+    // });
+    // * handover to Mongoose
+    const result = await registerServiceGetEmail(req?.body?.email);
+    // const resultRedisSet = await redisSet(`${keyRedis}`, result);
+    res.status(200).send({
+      status: "success",
+      message: "register successfully Found",
+      data: result,
+      // isCache: resultRedisSet,
+    });
+  } catch (err) {
+    res.status(400).send({
+      status: "register failed to Save",
       message: err.message,
     });
   }

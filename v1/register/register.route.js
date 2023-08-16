@@ -12,6 +12,9 @@ router
   .get(registerRouter.getRegisterId)
   .put(registerRouter.updateRegister)
   .delete(registerRouter.deleteRegister);
+
+// * only for logIn
+router.route("/logIn").post(registerRouter.checkLogIn);
 module.exports = router;
 
 /**
